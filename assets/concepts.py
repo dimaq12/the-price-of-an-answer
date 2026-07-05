@@ -44,7 +44,7 @@ def concept_price():
                 f"stroke='{BLUE}' stroke-width='2.5'/>")
     left=(f"<text x='{lcx}' y='110' text-anchor='middle' font-size='24' "
           f"font-weight='900' fill='{INK}'>The solver</text>"
-          f"<text x='{lcx}' y='140' text-anchor='middle' font-size='19' "
+          f"<text x='{lcx}' y='140' text-anchor='middle' font-size='23' "
           f"fill='{MUTED}'>charges per answer</text>"
           f"{coins}"
           f"<text x='{lcx}' y='470' text-anchor='middle' font-size='21' "
@@ -60,7 +60,7 @@ def concept_price():
           f"stroke-width='3'/>")
     right=(f"<text x='{rcx}' y='110' text-anchor='middle' font-size='24' "
            f"font-weight='900' fill='{INK}'>lastsolve</text>"
-           f"<text x='{rcx}' y='140' text-anchor='middle' font-size='19' "
+           f"<text x='{rcx}' y='140' text-anchor='middle' font-size='23' "
            f"fill='{MUTED}'>pays once, then answers free</text>"
            f"<text x='{rcx}' y='270' text-anchor='middle' font-size='20' "
            f"font-weight='800' fill='{GREEN}'>~7 solves</text>"
@@ -122,14 +122,14 @@ def concept_manifold():
         x=at(1.0)+rr.uniform(-16,16); y=by-40+rr.uniform(-14,14)
         cluster+=f"<circle cx='{x:.1f}' cy='{y:.1f}' r='6' fill='{GREEN}' opacity='.85'/>"
     soliton=(f"<circle cx='{at(2.7):.1f}' cy='{by-40}' r='10' fill='{RED}'/>"
-             f"<text x='{at(2.7):.1f}' y='{by-58}' text-anchor='middle' font-size='19' "
+             f"<text x='{at(2.7):.1f}' y='{by-58}' text-anchor='middle' font-size='23' "
              f"font-weight='800' fill='{RED}'>soliton (2 of 35)</text>")
     ticks=""
     for phi in (1,2):
         x=at(phi)
         ticks+=(f"<line x1='{x:.1f}' y1='{by+bh}' x2='{x:.1f}' y2='{by+bh+10}' "
                 f"stroke='{FAINT}' stroke-width='2'/>"
-                f"<text x='{x:.1f}' y='{by+bh+34}' text-anchor='middle' font-size='18' "
+                f"<text x='{x:.1f}' y='{by+bh+34}' text-anchor='middle' font-size='22' "
                 f"fill='{MUTED}'>&Phi;&#8321; = {phi}</text>")
     callout=(f"<rect x='{at(1.0)-160:.0f}' y='118' width='320' height='46' rx='23' "
              f"fill='{GREEN_BG}'/>"
@@ -137,9 +137,9 @@ def concept_manifold():
              f"font-weight='800' fill='{GREEN}'>33 of 35 PDEs sit here</text>"
              f"<line x1='{at(1.0):.0f}' y1='164' x2='{at(1.0):.0f}' y2='{by-56}' "
              f"stroke='{GREEN}' stroke-width='1.5' opacity='.5'/>")
-    ends=(f"<text x='{bx0}' y='{by+bh+34}' font-size='18' font-weight='700' "
+    ends=(f"<text x='{bx0}' y='{by+bh+34}' font-size='22' font-weight='700' "
           f"fill='{GREEN}'>one direction &mdash; cheap</text>"
-          f"<text x='{bx1}' y='{by+bh+34}' text-anchor='end' font-size='18' "
+          f"<text x='{bx1}' y='{by+bh+34}' text-anchor='end' font-size='22' "
           f"font-weight='700' fill='{RED}'>a genuine wall</text>")
     svg=(f"<svg width='{W}' height='{H}' viewBox='0 0 {W} {H}'>{grad}{callout}{bar}"
          f"{cluster}{soliton}{ticks}{ends}</svg>")
@@ -157,21 +157,21 @@ def concept_backwards():
     fk=(f"<rect x='120' y='90' width='150' height='70' rx='14' fill='{BLUE_BG}'/>"
         f"<text x='195' y='133' text-anchor='middle' font-size='26' font-weight='900' "
         f"fill='{BLUE}'>k</text>"
-        f"<text x='195' y='185' text-anchor='middle' font-size='17' fill='{MUTED}'>parameter</text>")
+        f"<text x='195' y='185' text-anchor='middle' font-size='22' fill='{MUTED}'>parameter</text>")
     fu=(f"<rect x='810' y='90' width='150' height='70' rx='14' fill='{GREEN_BG}'/>"
         f"<text x='885' y='133' text-anchor='middle' font-size='26' font-weight='900' "
         f"fill='{GREEN}'>u</text>"
-        f"<text x='885' y='185' text-anchor='middle' font-size='17' fill='{MUTED}'>the field</text>")
+        f"<text x='885' y='185' text-anchor='middle' font-size='22' fill='{MUTED}'>the field</text>")
     fwd=(f"<line x1='285' y1='125' x2='795' y2='125' stroke='{INK}' stroke-width='3'/>"
          f"<path d='M 795 125 l -16 -9 v 18 z' fill='{INK}'/>"
-         f"<text x='540' y='110' text-anchor='middle' font-size='19' font-weight='700' "
+         f"<text x='540' y='110' text-anchor='middle' font-size='23' font-weight='700' "
          f"fill='{INK}'>forward &mdash; 7 solves</text>")
     # inverse row
     inv=(f"<line x1='795' y1='270' x2='285' y2='270' stroke='{AMBER}' stroke-width='3'/>"
          f"<path d='M 285 270 l 16 -9 v 18 z' fill='{AMBER}'/>"
-         f"<text x='540' y='255' text-anchor='middle' font-size='19' font-weight='700' "
+         f"<text x='540' y='255' text-anchor='middle' font-size='23' font-weight='700' "
          f"fill='{AMBER}'>inverse &mdash; zero extra solves</text>"
-         f"<text x='540' y='300' text-anchor='middle' font-size='18' fill='{MUTED}'>"
+         f"<text x='540' y='300' text-anchor='middle' font-size='22' fill='{MUTED}'>"
          f"k&#770; &plusmn; Cram&eacute;r&ndash;Rao bar &mdash; the floor no method can beat</text>")
     svg=(f"<svg width='{W}' height='{H}' viewBox='0 0 {W} {H}'>{fk}{fu}{fwd}{inv}</svg>")
     inner=(f"<div class='title'>The same kernel, read backwards</div>"
@@ -191,7 +191,7 @@ def concept_wall():
         y=Y(gy)
         grid+=(f"<line x1='{L}' y1='{y:.1f}' x2='{W-R}' y2='{y:.1f}' stroke='{HAIR}' "
                f"stroke-width='1'/><text x='{L-12}' y='{y+5:.1f}' text-anchor='end' "
-               f"font-size='16' fill='{FAINT}'>{lab}</text>")
+               f"font-size='21' fill='{FAINT}'>{lab}</text>")
     # healthy: plunges to machine precision
     hp=[(X(t),Y(1.0-1.0*min(t*3,1.0))) for t in [0,.12,.24,.36,.5,.7,1.0]]
     hpath="M "+" L ".join(f"{x:.1f} {y:.1f}" for x,y in hp)
@@ -201,16 +201,16 @@ def concept_wall():
     spath="M "+" L ".join(f"{x:.1f} {y:.1f}" for x,y in sp)
     sol=(f"<path d='{spath}' fill='none' stroke='{RED}' stroke-width='3.5'/>"
          f"<circle cx='{X(1.0):.1f}' cy='{Y(0.70):.1f}' r='8' fill='{RED}'/>"
-         f"<text x='{X(0.60):.0f}' y='{Y(0.92):.0f}' text-anchor='middle' font-size='19' "
+         f"<text x='{X(0.60):.0f}' y='{Y(0.92):.0f}' text-anchor='middle' font-size='23' "
          f"font-weight='800' fill='{RED}'>soliton &mdash; &Phi;&#8321; = 2.7, stalls at 7&times;10&#8315;&#179;</text>")
-    hlab=(f"<text x='{X(0.60):.0f}' y='{Y(0.055):.0f}' text-anchor='middle' font-size='19' "
+    hlab=(f"<text x='{X(0.60):.0f}' y='{Y(0.055):.0f}' text-anchor='middle' font-size='23' "
           f"font-weight='800' fill='{GREEN}'>healthy PDE &mdash; &Phi;&#8321; = 1.0, machine precision</text>")
-    xlab=(f"<text x='{(L+W-R)/2:.0f}' y='{H-26}' text-anchor='middle' font-size='17' "
+    xlab=(f"<text x='{(L+W-R)/2:.0f}' y='{H-26}' text-anchor='middle' font-size='22' "
           f"fill='{MUTED}'>nodes spent &rarr; (7 &hellip; 200 solves)</text>")
     svg=(f"<svg width='{W}' height='{H}' viewBox='0 0 {W} {H}'>{grid}{healthy}{sol}{hlab}{xlab}</svg>")
     inner=(f"<div class='title'>The one wall &mdash; and the dial called it first</div>"
            f"<div style='margin-top:22px'>{svg}</div>")
-    return frame(inner,560)
+    return frame(inner,640)
 
 for name,fn in [("concept-price",concept_price),
                 ("concept-seven",concept_seven),
