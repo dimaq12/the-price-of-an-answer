@@ -1,14 +1,20 @@
 # The Price of an Answer
 
+![The Price of an Answer — seven solves light up the entire parametric curve of a nonlinear PDE at machine precision; the solver was redundant at query time all along.](assets/hero.png)
+
 *Spectra Without Matrices · Journey II. Part I — [Never Quantum at All](https://github.com/dimaq12/do-we-need-quantum-computing) — used one matrix-free number to tell genuine quantum speedups from costumes. This time the same number walks into the world of nonlinear PDEs and asks every solver the rudest possible question: what am I actually paying you for?*
 
 ## The bill
+
+![What does one answer cost? The solver charges per answer — 1000s of solves; lastsolve pays once (~7 solves) then answers in microseconds forever.](assets/concept-price.png)
 
 Every answer in computational science arrives with a bill. You want to know how a shock forms at viscosity ν = 0.031? Run the solver. At 0.032? Run it again. A parameter sweep is a thousand runs; a calibration loop is a thousand sweeps. The solver charges per answer, and everyone pays, because the equations are *nonlinear* — and nonlinear means no shortcuts. Right?
 
 I took 35 famous nonlinear PDEs — Burgers, KdV, Kuramoto–Sivashinsky in full chaos, a bright soliton, Camassa–Holm, fractional heat, thirty more — and put that assumption on a stand. The question, same as in Journey I: how much *structure* does the problem have, and what does that structure make redundant? There, the redundant machine was a quantum computer. Here it is the solver itself.
 
 ## One number, again
+
+![The effective rank Φ₁ reads the whole parametric family at once: 33 of 35 PDEs sit at Φ₁ = 1 (one direction — cheap), the soliton alone at 2.7 (a genuine wall).](assets/concept-manifold.png)
 
 The dial is the effective rank Φ₁ — the number of directions an object really uses. In Journey I it read the spectra of data matrices. Here it reads the *parametric manifold*: solve the PDE at a handful of parameter values, stack the solutions, and ask the SVD how many independent directions the family {u(T; k)} actually spans.
 
@@ -18,6 +24,8 @@ Low rank meant "dequantizable" in Journey I. Here it means something just as blu
 
 ## Seven solves buy everything
 
+![Seven Chebyshev nodes (the solves) pin down u(T;k), and the interpolant is exact everywhere between them — ~5×10⁻¹⁵ over the whole range.](assets/concept-seven.png)
+
 The stand solves each equation at 7 Chebyshev points of the parameter range and builds a barycentric interpolant — a fifty-line construction from a numerical analysis textbook. That is the whole method. The price list it produces:
 
 - **Forward answers:** 34 of 35 equations at relative error ~5·10⁻¹⁵ — machine precision — *across the entire parameter range*, not near an anchor. Queries take 8–14 microseconds: a median **576× faster** than the solver, and the ratio is honest — it includes nothing amortized, no GPU, no training.
@@ -26,6 +34,8 @@ The stand solves each equation at 7 Chebyshev points of the parameter range and 
 
 ## The same seven solves, read backwards
 
+![The same kernel read backwards: forward k→u costs 7 solves, the inverse u→k costs zero extra solves and returns k̂ ± the Cramér–Rao bar, the floor no method can beat.](assets/concept-backwards.png)
+
 An interpolant you can query in microseconds is an inverse solver you can run for free. Hide a parameter k*, hand me one noisy snapshot of the solution, and finding k̂ is a scan along the one-dimensional curve — **zero additional PDE solves**.
 
 - Clean data: **35 of 35** recovered below 10⁻¹⁰; several to the exact float64 bit.
@@ -33,6 +43,8 @@ An interpolant you can query in microseconds is an inverse solver you can run fo
 - The derivative of the interpolant is the Fisher information, so every estimate ships with an honest error bar — computed from the data itself. When a parameter is unidentifiable, the bar says so instead of the estimate lying.
 
 ## A whole map from one snapshot
+
+![Field inversion: the singular spectrum of the Jacobian shows 10 of 128 directions rise above the noise — the snapshot contains ~10 independent numbers about the map, and the reconstruction claims only those.](assets/field-inversion.png)
 
 The rudest version of the inverse problem: hide not a number but a *function* — a viscosity map ν(x), background plus a smooth wave plus a local defect — and hand over a single snapshot of Burgers flow at 1% noise. 128 unknowns, 128 noisy observations, and Hadamard laughing in the background.
 
@@ -43,6 +55,8 @@ Two lines from the stand deserve framing. Raise the noise to 5% and the visible 
 This is the part that classical field inversion and neural reconstructions both get wrong by design: they always return a map, confident everywhere, half of it invented. Measuring what the data can see *before* reconstructing is the entire difference between an answer and a guess.
 
 ## The walls — and the dial saw them first
+
+![Convergence vs nodes spent: a healthy PDE plunges to machine precision, the soliton stalls at 7×10⁻³ no matter the budget — an n-width wall the dial flagged in advance at Φ₁ = 2.7.](assets/concept-wall.png)
 
 Honesty section, as in Journey I. One thing refused to fall — and the refusal was *predicted*.
 
