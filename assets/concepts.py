@@ -77,40 +77,34 @@ def concept_price():
 # ══════════════════════════════════════════════════════════════════════════
 def concept_seven():
     W,H=1080,470
-    x0,x1=110,970; y0,ymid=120,300; amp=140
-    # the true curve u(T;k) — a smooth wave
-    pts=[]
-    for i in range(200):
-        t=i/199; x=x0+(x1-x0)*t
-        y=ymid-amp*math.sin(2.6*t+0.5)*math.exp(-0.4*t)
-        pts.append((x,y))
+    x0,x1=120,960; ymid=240; amp=100; axy=372
+    def fy(t): return ymid-amp*math.sin(2.6*t+0.5)*math.exp(-0.4*t)
+    pts=[(x0+(x1-x0)*i/199, fy(i/199)) for i in range(200)]
     path="M "+" L ".join(f"{x:.1f} {y:.1f}" for x,y in pts)
-    curve=f"<path d='{path}' fill='none' stroke='{BLUE}' stroke-width='3.5'/>"
-    # 7 Chebyshev nodes ON the curve
+    curve=f"<path d='{path}' fill='none' stroke='{BLUE}' stroke-width='4'/>"
     nodes=""
     for j in range(7):
         t=0.5-0.5*math.cos((2*j+1)*math.pi/14)   # chebyshev in [0,1]
-        x=x0+(x1-x0)*t
-        y=ymid-amp*math.sin(2.6*t+0.5)*math.exp(-0.4*t)
-        nodes+=(f"<line x1='{x:.1f}' y1='{y:.1f}' x2='{x:.1f}' y2='440' "
+        x=x0+(x1-x0)*t; y=fy(t)
+        nodes+=(f"<line x1='{x:.1f}' y1='{y:.1f}' x2='{x:.1f}' y2='{axy}' "
                 f"stroke='{GREEN}' stroke-width='1.5' opacity='.4'/>"
-                f"<circle cx='{x:.1f}' cy='{y:.1f}' r='11' fill='#fff' "
-                f"stroke='{GREEN}' stroke-width='4'/>")
-    axis=(f"<line x1='{x0}' y1='440' x2='{x1}' y2='440' stroke='{HAIR}' "
+                f"<circle cx='{x:.1f}' cy='{y:.1f}' r='13' fill='#fff' "
+                f"stroke='{GREEN}' stroke-width='5'/>")
+    axis=(f"<line x1='{x0}' y1='{axy}' x2='{x1}' y2='{axy}' stroke='{HAIR}' "
           f"stroke-width='2'/>"
-          f"<text x='{x1}' y='430' text-anchor='end' font-size='18' "
+          f"<text x='{x1}' y='{axy-16}' text-anchor='end' font-size='22' "
           f"fill='{FAINT}'>parameter k &rarr;</text>"
-          f"<text x='{x0-8}' y='150' font-size='19' font-weight='700' "
+          f"<text x='{x0-12}' y='128' font-size='24' font-weight='700' "
           f"fill='{BLUE}'>u(T; k)</text>")
-    label=(f"<text x='{(x0+x1)/2:.0f}' y='92' text-anchor='middle' font-size='21' "
+    label=(f"<text x='{(x0+x1)/2:.0f}' y='72' text-anchor='middle' font-size='26' "
            f"font-weight='800' fill='{GREEN}'>7 solves &mdash; the green nodes</text>"
-           f"<text x='{(x0+x1)/2:.0f}' y='488' text-anchor='middle' font-size='19' "
+           f"<text x='{(x0+x1)/2:.0f}' y='{axy+54}' text-anchor='middle' font-size='24' "
            f"font-weight='700' fill='{BLUE}'>&hellip;and the blue curve is exact "
-           f"between them &mdash; ~5&times;10&#8315;&#185;&#8309; over the whole range</text>")
-    svg=f"<svg width='{W}' height='510' viewBox='0 0 {W} 510'>{axis}{curve}{nodes}{label}</svg>"
+           f"between them: ~5&times;10&#8315;&#185;&#8309; over the whole range</text>")
+    svg=f"<svg width='{W}' height='{axy+74}' viewBox='0 0 {W} {axy+74}'>{axis}{curve}{nodes}{label}</svg>"
     inner=(f"<div class='title'>Seven solves buy the whole curve</div>"
-           f"<div style='margin-top:22px'>{svg}</div>")
-    return frame(inner,600)
+           f"<div style='margin-top:20px'>{svg}</div>")
+    return frame(inner,560)
 
 # ══════════════════════════════════════════════════════════════════════════
 # 3 — THE DIAL reads the family: 35 PDEs, almost all at Φ₁ = 1
