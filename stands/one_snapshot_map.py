@@ -246,37 +246,74 @@ try:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    INK, MUT, GREEN, RED, BLUE = "#1A2233", "#6B7689", "#0CA678", "#E8453C", "#4C6EF5"
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.5, 4.6),
-                                   gridspec_kw={'width_ratios': [1.9, 1]})
-    ax1.fill_between(X, nu_hat-2*bar, nu_hat+2*bar, color=GREEN, alpha=.18, lw=0,
-                     label="±2σ bar (visible modes)")
-    ax1.plot(X, nu_true, color=INK, lw=2.2, label="truth ν*(x)")
-    ax1.plot(X, nu_hat, color=GREEN, lw=2.2, ls="--", label=f"recovered (r={r_vis} modes)")
-    ax1.axhline(NU0, color=MUT, lw=1, ls=":", label="prior ν₀")
-    ax1.annotate("defect", xy=(4.2, nu_true.max()*0.99), color=RED,
-                 ha="center", fontsize=11, fontweight="bold")
-    ax1.set_xlabel("x"); ax1.set_ylabel("ν(x)")
-    ax1.set_title(f"ν(x) from one snapshot, σ=1% — visible error {rec_err_vis:.1%}",
-                  fontsize=12, fontweight="bold", color=INK)
-    ax1.legend(frameon=False, fontsize=10, loc="upper left")
+    from matplotlib import font_manager
+    # match the concept cards: Lato, big labels, the series palette
+    for f in ("/usr/share/fonts/truetype/lato/Lato-Regular.ttf",
+              "/usr/share/fonts/truetype/lato/Lato-Bold.ttf",
+              "/usr/share/fonts/truetype/lato/Lato-Black.ttf"):
+        if Path(f).exists():
+            font_manager.fontManager.addfont(f)
+    plt.rcParams.update({"font.family": "Lato", "font.size": 17,
+                         "axes.edgecolor": "#C7CCD6", "axes.linewidth": 1.4,
+                         "xtick.color": "#6B7689", "ytick.color": "#6B7689",
+                         "text.color": "#1A2233", "axes.labelcolor": "#1A2233"})
+    INK, MUT, FAINT = "#1A2233", "#6B7689", "#9AA3B2"
+    GREEN, RED, BLUE, HAIR = "#0CA678", "#E8453C", "#2B6CF6", "#EAECEF"
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14.0, 5.4),
+                                   gridspec_kw={'width_ratios': [1.85, 1]})
+    fig.patch.set_facecolor("white")
+
+    # ── left: the map — truth, recovery, and the honest ±2σ band ──
+    ax1.fill_between(X, nu_hat-2*bar, nu_hat+2*bar, color=GREEN, alpha=.16, lw=0)
+    ax1.plot(X, nu_true, color=INK, lw=3.0, solid_capstyle="round")
+    ax1.plot(X, nu_hat, color=GREEN, lw=3.0, ls=(0, (4, 3)), solid_capstyle="round")
+    ax1.axhline(NU0, color=FAINT, lw=1.3, ls=":")
+    # direct labels on the curves — no tiny legend to squint at
+    ax1.annotate("truth  ν*(x)", xy=(1.55, nu_true[int(1.55/(2*np.pi)*N)]),
+                 xytext=(1.2, 0.052), color=INK, fontsize=17, fontweight="bold")
+    ax1.annotate("recovered", xy=(2.45, nu_hat[int(2.45/(2*np.pi)*N)]),
+                 xytext=(2.0, 0.010), color=GREEN, fontsize=17, fontweight="bold")
+    ax1.annotate("prior ν₀", xy=(6.0, NU0), xytext=(5.2, 0.0335),
+                 color=MUT, fontsize=15)
+    ax1.annotate("the ±2σ band —\nhonest 'blind here'", xy=(3.15, 0.050),
+                 color=GREEN, fontsize=14, ha="center", fontweight="bold")
+    ax1.annotate("defect found\nx = 4.27  (true 4.20)", xy=(4.2, 0.044),
+                 xytext=(4.2, 0.058), color=RED, fontsize=15, ha="center",
+                 fontweight="bold",
+                 arrowprops=dict(arrowstyle="->", color=RED, lw=2))
+    ax1.set_xlabel("position  x", fontsize=17)
+    ax1.set_ylabel("viscosity  ν(x)", fontsize=17)
+    ax1.set_title("A whole map from one noisy snapshot",
+                  fontsize=21, fontweight="black", color=INK, pad=14)
+    ax1.tick_params(labelsize=15)
+    ax1.set_ylim(-0.002, 0.064)
     for s in ("top", "right"):
         ax1.spines[s].set_visible(False)
 
+    # ── right: what the data can actually see ──
     idx = np.arange(1, 41)
-    ax2.semilogy(idx, S[:40]/sigma, "o-", color=BLUE, ms=4, lw=1.6)
-    ax2.axhline(1/PRIOR_AMP, color=RED, lw=1.4, ls="--")
-    ax2.axvline(r_vis+0.5, color=MUT, lw=1, ls=":")
-    ax2.text(r_vis+1.2, S[0]/sigma*0.5, f"r = {r_vis}\nvisible", color=RED, fontsize=10)
-    ax2.set_xlabel("mode i"); ax2.set_ylabel("σᵢ / σ_noise")
-    ax2.set_title(f"what the data can see — Φ₁ = {phi1:.1f}",
-                  fontsize=12, fontweight="bold", color=INK)
+    ax2.semilogy(idx, S[:40]/sigma, "o-", color=BLUE, ms=6, lw=2.2,
+                 markerfacecolor="white", markeredgewidth=2.2)
+    ax2.axhline(1/PRIOR_AMP, color=RED, lw=2.0, ls="--")
+    ax2.axvline(r_vis+0.5, color=FAINT, lw=1.4, ls=":")
+    ax2.annotate(f"only {r_vis} of 128\nrise above the noise", xy=(r_vis+0.6, 55),
+                 xytext=(15, 130), color=RED, fontsize=15, fontweight="bold",
+                 ha="left", arrowprops=dict(arrowstyle="->", color=RED, lw=2))
+    ax2.text(38, 1/PRIOR_AMP*1.35, "noise floor", color=RED, fontsize=13,
+             ha="right")
+    ax2.set_xlabel("mode number", fontsize=17)
+    ax2.set_ylabel("signal / noise", fontsize=17)
+    ax2.set_title(f"what the data can see  ·  Φ₁ = {phi1:.1f}",
+                  fontsize=21, fontweight="black", color=INK, pad=14)
+    ax2.tick_params(labelsize=15)
     for s in ("top", "right"):
         ax2.spines[s].set_visible(False)
-    fig.tight_layout()
+
+    fig.tight_layout(pad=1.6)
     out = Path(__file__).resolve().parents[1]/"assets"/"field-inversion.png"
     out.parent.mkdir(exist_ok=True)
-    fig.savefig(out, dpi=160)
+    fig.savefig(out, dpi=170, facecolor="white")
     print(f"\n  figure → {out.relative_to(Path(__file__).resolve().parents[1])}")
 except Exception as e:
     print(f"  (figure skipped: {e})")
